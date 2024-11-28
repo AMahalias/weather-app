@@ -1,5 +1,8 @@
 const weatherBlocksContainer = document.getElementById('weather-blocks');
-const addBlock = document.getElementById('add-block');
+const addBlockButton = document.getElementById('add-block');
+const mainTabButton = document.getElementById('view-main');
+const favoritesTabButton = document.getElementById('view-favorites');
+const favoritesSection = document.getElementById('favorites');
 
 let weatherBlocks = [];
 
@@ -56,6 +59,7 @@ function createWeatherBlock(id) {
     block.querySelector('.favorite-btn').addEventListener('click', () => toggleFavorite(id));
 
     weatherBlocksContainer.appendChild(block);
+    weatherBlocks.push(id);
 }
 
 function deleteBlock(id) {
@@ -85,20 +89,36 @@ async function displayWeather(data, city, blockId) {
     cityName.innerHTML = city.name;
     weatherInfoDiv.innerHTML = `Temperature: ${temp}°C, Feels like: ${feels_like}°C, ${weatherDescription}, Humidity: ${humidity}%`;
 
+    toggleActiveFavoriteBtn(block, city.name);
     block.classList.remove('hidden');
     await renderChart(city, tempChartCanvas);
 }
 
 // listeners
-addBlock.addEventListener('click', () => {
+addBlockButton.addEventListener('click', () => {
     if (weatherBlocks.length >= MAX_BLOCKS) {
         showModal(`You can only have a maximum of ${MAX_BLOCKS} weather blocks.`);
         return;
     }
 
     const blockId = Date.now();
-    weatherBlocks.push(blockId);
     createWeatherBlock(blockId);
+});
+
+mainTabButton.addEventListener('click', () => {
+    weatherBlocksContainer.classList.add('active');
+    weatherBlocksContainer.classList.remove('hidden');
+    favoritesSection.classList.add('hidden');
+    favoritesSection.classList.remove('active');
+    addBlockButton.classList.remove('hidden');
+});
+
+favoritesTabButton.addEventListener('click', () => {
+    favoritesSection.classList.add('active');
+    favoritesSection.classList.remove('hidden');
+    weatherBlocksContainer.classList.add('hidden');
+    weatherBlocksContainer.classList.remove('active');
+    addBlockButton.classList.add('hidden');
 });
 
 createWeatherBlock(1);

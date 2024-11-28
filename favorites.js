@@ -9,21 +9,21 @@ function updateFavoritesStorage() {
     localStorage.setItem('favorites', JSON.stringify(favoriteCities));
 }
 
-function displayFavoriteBlocks() {
+async function displayFavoriteBlocks () {
     favoritesContainer.innerHTML = '';
-    favoriteCities.forEach(async city => {
+
+    favoriteCities.forEach(city => {
         const block = document.createElement('div');
         block.className = 'weather-fav-block';
         block.innerHTML = `
-            <h2>${city.name}</h2>
-            <div class="view-mode">
-                <button id="day-view" class="view-btn active">Day</button>
-                <button id="week-view" class="view-btn">Week</button>
-            </div>
-            <div class="weather-info"></div>
-             <canvas class="weather-chart"></canvas>
-            <button class="remove-favorite-btn" data-name="${city.name}">Remove</button>
-        `;
+        <h2>${city.name}</h2>
+        <div class="view-mode">
+            <button id="day-view" class="view-btn active">День</button>
+            <button id="week-view" class="view-btn">Тиждень</button>
+        </div>
+        <div class="weather-info"></div>
+         <canvas class="weather-chart"></canvas>
+    `;
 
         favoritesContainer.appendChild(block);
 
@@ -32,13 +32,6 @@ function displayFavoriteBlocks() {
         const weatherInfo = block.querySelector('.weather-info');
         const chartElement = block.querySelector('.weather-chart');
 
-        // Загружаем данные для текущего города при открытии блока
-        await updateWeatherInfo(city, 'day', weatherInfo, chartElement);
-
-        console.log("City:", city.name);
-        console.log("Day button:", dayButton);
-        console.log("Week button:", weekButton);
-        // Обработчики для переключения режимов "Day" / "Week"
         if (dayButton && weekButton) {
             dayButton.addEventListener('click', async () => {
                 dayButton.classList.add('active');
@@ -52,21 +45,15 @@ function displayFavoriteBlocks() {
                 await updateWeatherInfo(city, 'week', weatherInfo, chartElement);
             });
         }
-    });
 
-    document.querySelectorAll('.remove-favorite-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const cityName = e.target.dataset.name;
-            removeFavorite(cityName);
+            updateWeatherInfo(city, 'day', weatherInfo, chartElement);
         });
-    });
 }
 
 async function updateWeatherInfo(city, mode, weatherInfoElement, chartElement) {
     try {
         const weatherData = await fetchCurrentWeather(city);
 
-        console.log(weatherData)
         if (mode === 'day') {
             const { main: { temp, feels_like, humidity }, weather } = weatherData;
             const description = weather[0].description;
@@ -125,10 +112,14 @@ function toggleFavorite(blockId) {
     displayFavoriteBlocks();
 }
 
-function removeFavorite(cityName) {
-    favoriteCities = favoriteCities.filter(city => city.name !== cityName);
-    updateFavoritesStorage();
-    displayFavoriteBlocks();
+function toggleActiveFavoriteBtn(block, name) {
+    const favoriteBtn = block.querySelector('.favorite-btn');
+
+    if (favoriteCities.some(favCity => favCity.name === name)) {
+        favoriteBtn.classList.add('active');
+    } else {
+        favoriteBtn.classList.remove('active');
+    }
 }
 
 function updateWeatherBlock(city) {
@@ -138,13 +129,7 @@ function updateWeatherBlock(city) {
         const cityName = block.querySelector('.city-name').textContent;
 
         if (cityName === city.name) {
-            const favoriteBtn = block.querySelector('.favorite-btn');
-
-            if (favoriteCities.some(fav => fav.name === city.name)) {
-                favoriteBtn.classList.add('active');
-            } else {
-                favoriteBtn.classList.remove('active');
-            }
+            toggleActiveFavoriteBtn(block, city.name)
         }
     });
 }
@@ -152,26 +137,15 @@ function updateWeatherBlock(city) {
 // listeners
 document.addEventListener('DOMContentLoaded', () => {
     const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    console.log('Loaded from localStorage:', storedFavorites);
     favoriteCities = storedFavorites.map(city => ({
         name: city.name,
         local_names: city.local_names || {},
         lat: city.lat,
         lon: city.lon
     }));
-    console.log('After mapping localStorage data:', favoriteCities);
     displayFavoriteBlocks();
 
     viewFavoritesButton.addEventListener('click', () => {
         favoritesTab.classList.toggle('hidden');
     });
 });
-
-// viewFavoritesButton.addEventListener('click', () => {
-//     favoritesContainer.innerHTML = '';
-//     favoriteCities.forEach(city => {
-//         const cityDiv = document.createElement('div');
-//         cityDiv.textContent = city;
-//         favoritesContainer.appendChild(cityDiv);
-//     });
-// });

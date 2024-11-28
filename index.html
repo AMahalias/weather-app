@@ -10,19 +10,23 @@
 <body>
 <div class="container">
     <h1>Weather App</h1>
-    <button id="add-block">+</button>
-    <button id="view-favorites">Favorites</button>
+    <div class="main-buttons">
+        <div class="nav-buttons">
+            <button id="view-main">Головна</button>
+            <button id="view-favorites">Вибране</button>
+        </div>
+        <button id="add-block">+</button>
+    </div>
     <div id="weather-blocks"></div>
     <div id="favorites" class="hidden">
-        <h2>Favorites</h2>
         <div id="favorite-blocks"></div>
     </div>
 </div>
 <div id="modal" class="modal hidden">
     <div class="modal-content">
         <p id="modal-message"></p>
-        <button id="confirm-delete">Confirm</button>
-        <button id="cancel-delete">Cancel</button>
+        <button id="confirm-delete">Підтвердити</button>
+        <button id="cancel-delete">Відмінити</button>
     </div>
 </div>
 <script src="modal.js" defer></script>
