@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Weather App</h1>
+    <button id="add-block">+</button>
+    <button id="view-favorites">Favorites</button>
+    <div id="weather-blocks"></div>
+    <div id="favorites" class="hidden">
+        <h2>Favorites</h2>
+        <div id="favorite-blocks"></div>
+    </div>
+</div>
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <p id="modal-message"></p>
+        <button id="confirm-delete">Confirm</button>
+        <button id="cancel-delete">Cancel</button>
+    </div>
+</div>
+<script src="modal.js" defer></script>
+<script src="favorites.js" defer></script>
+<script src="chart.js" defer></script>
+<script src="api.js" defer></script>
+<script src="index.js" defer></script>
+</body>
+</html>
