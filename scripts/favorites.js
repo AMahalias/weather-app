@@ -82,11 +82,7 @@ function toggleFavorite(blockId) {
     const cityName = inputField ? inputField.value.trim() : '';
 
     if (!cityName) {
-        modalMessage.textContent = 'Не можна додати пусте місто до обраних';
-        modal.classList.remove('hidden');
-        cancelDeleteButton.onclick = () => {
-            modal.classList.add('hidden');
-        };
+        showModal('Не можна додати пусте місто до обраних. Введіть місто та оберіть серед запропонованих');
         return;
     }
     const city = JSON.parse(block.getAttribute('data-city'));
@@ -96,22 +92,18 @@ function toggleFavorite(blockId) {
         favoriteCities = favoriteCities.filter(fav => fav.name !== city.name);
     } else {
         if (favoriteCities.length >= 5) {
-            modalMessage.textContent = `Для додавання видаліть місто "${favoriteCities[favoriteCities.length - 1].name}", тому що максимум 5`;
-            modal.classList.remove('hidden');
+            const needDeletedCity = favoriteCities[favoriteCities.length - 1].name;
+            const modalMessage = `Для додавання видаліть місто "${needDeletedCity}", тому що максимум 5`;
 
-            confirmDeleteButton.onclick = () => {
+            function confirmDeleteBtnCallback () {
                 favoriteCities.pop();
                 favoriteCities.push(city);
                 updateFavoritesStorage();
                 displayFavoriteBlocks();
                 toggleActiveFavoriteBtn(block, city.name)
-                modal.classList.add('hidden');
-            };
+            }
 
-            cancelDeleteButton.onclick = () => {
-                modal.classList.add('hidden');
-            };
-
+            showModal(modalMessage, confirmDeleteBtnCallback, blockId);
             return;
         }
 

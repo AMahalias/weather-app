@@ -2,9 +2,10 @@ const modal = document.getElementById('modal');
 const modalMessage = document.getElementById('modal-message');
 const confirmDeleteButton = document.getElementById('confirm-delete');
 const cancelDeleteButton = document.getElementById('cancel-delete');
-let blockToDeleteId = null;
+let confirmButtonCallback = null;
 
-function showModal(message, blockId = null) {
+
+function showModal(message, confirmBtnCallback = null, blockId = null) {
     modalMessage.textContent = message;
 
     if (!blockId) {
@@ -13,22 +14,27 @@ function showModal(message, blockId = null) {
         confirmDeleteButton.classList.remove('hidden');
     }
 
-    blockToDeleteId = blockId;
+    if (confirmBtnCallback) {
+        confirmButtonCallback = confirmBtnCallback;
+    }
+
     modal.classList.remove('hidden');
 }
 
 function hideModal() {
     modal.classList.add('hidden');
-    blockToDeleteId = null;
 }
 
 if (confirmDeleteButton) {
     confirmDeleteButton.addEventListener('click', () => {
-        if (blockToDeleteId) {
-            deleteBlock(blockToDeleteId);
-            hideModal();
+        if (confirmButtonCallback) {
+            confirmButtonCallback();
         }
+
+        hideModal();
     });
 }
 
-cancelDeleteButton.addEventListener('click', hideModal);
+cancelDeleteButton.addEventListener('click', () => {
+    hideModal();
+});

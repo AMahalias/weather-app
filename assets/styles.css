@@ -1,3 +1,18 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #ff9800;
+    --danger-color: #f44336;
+    --hover-color: #0056b3;
+    --active-color: #003d80;
+    --success-color: #28a745;
+    --light-bg-color: #f9f9f9;
+    --white-classic: #ffffff;
+    --text-color: #333;
+    --modal-bg-color: rgba(0, 0, 0, 0.5);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Global styles */
 body {
     display: flex;
     justify-content: center;
@@ -6,7 +21,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f9;
-    color: #333;
+    color: var(--text-color);
 }
 
 .container {
@@ -14,6 +29,15 @@ body {
     width: 90%;
 }
 
+.hidden {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+/* Title & logo */
 .title {
     display: flex;
     gap: 20px;
@@ -23,24 +47,24 @@ body {
 }
 
 .title h1 {
-    color: #007bff;
+    color: var(--primary-color);
     animation: colorChange 4s alternate;
     animation-fill-mode: forwards;
 }
 
 .title h1 span {
-    color: #ff9800;
+    color: var(--secondary-color);
 }
 
 @keyframes colorChange {
     0% {
-        color: #007bff;
+        color: var(--primary-color);
     }
     50% {
-        color: #ff9800;
+        color: var(--secondary-color);
     }
     100% {
-        color: #007bff;
+        color: var(--primary-color);
     }
 }
 
@@ -54,29 +78,79 @@ body {
     transition: height 0.3s;;
 }
 
-#weather-card {
-    margin-top: 20px;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+/* Main buttons */
+.main-buttons {
+    display: flex;
+    justify-content: space-between;
 }
 
-#temp-chart, .weather-chart {
-    width: 100%;
-    max-width: 600px;
-    height: 300px;
-    max-height: 300px;
+.nav-buttons {
+    display: flex;
+    gap: 20px;
 }
 
+.nav-buttons button {
+    background-color: var(--primary-color);
+    color: var(--white-classic);
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
+.nav-buttons button:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+}
+
+.nav-buttons button:active {
+    background-color: var(--active-color);
+    transform: translateY(1px);
+}
+
+#add-block {
+    background-color: var(--success-color);
+    color: var(--white-classic);
+    border: none;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#add-block:hover {
+    background-color: #218838;
+    transform: scale(1.1);
+}
+
+#add-block:active {
+    background-color: #1e7e34;
+    transform: scale(0.95);
+}
+
+#add-block.hidden {
+    display: none;
+}
+
+/* Modal */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--modal-bg-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,7 +158,7 @@ body {
 }
 
 .modal-content {
-    background: #fff;
+    background: var(--white-classic);
     padding: 20px;
     border-radius: 8px;
     text-align: center;
@@ -92,6 +166,43 @@ body {
     max-width: 400px;
 }
 
+.modal-content button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.modal-content button:active {
+    transform: scale(0.98);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+#confirm-delete {
+    background-color: var(--success-color);
+    color: white;
+}
+
+#confirm-delete:hover {
+    background-color: #218838;
+}
+
+#cancel-delete {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+#cancel-delete:hover {
+    background-color: #c82333;
+}
+
+/* Weather blocks container & Favorite blocks container */
 #weather-blocks, #favorite-blocks {
     display: flex;
     justify-content: center;
@@ -103,57 +214,17 @@ body {
     display: none;
 }
 
+/* Block details weather & favorite */
 .weather-block, .weather-fav-block {
     width: calc(33.333% - 20px);
     min-width: 300px;
-    background: #f9f9f9;
+    background: var(--light-bg-color);
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--shadow-color);
     position: relative;
 }
 
-.weather-block.favorited {
-    border: 2px solid #ff9800;
-}
-
-button.delete-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #f44336;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-}
-
-button.favorite-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 25px;
-    height: 25px;
-}
-
-@media (max-width: 600px) {
-    .weather-block {
-        width: 100%;
-    }
-}
-
-.hidden {
-    display: none;
-}
-
-.active {
-    display: block;
-}
 
 #favorites {
     padding: 20px;
@@ -167,6 +238,7 @@ button.favorite-btn {
     margin: 0;
 }
 
+/* Favorite block details */
 .weather-fav-block {
     display: flex;
     flex-direction: column;
@@ -175,8 +247,8 @@ button.favorite-btn {
     margin: 15px 0;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--light-bg-color);
+    box-shadow: 0 1px 5px var(--shadow-color);
     transition: box-shadow 0.3s;
 }
 
@@ -192,9 +264,9 @@ button.favorite-btn {
 .view-btn {
     padding: 8px 12px;
     margin: 0 5px;
-    border: 1px solid #007bff;
-    background-color: #007bff;
-    color: #fff;
+    border: 1px solid var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--white-classic);
     font-size: 14px;
     cursor: pointer;
     border-radius: 4px;
@@ -202,11 +274,11 @@ button.favorite-btn {
 }
 
 .view-btn.active {
-    background-color: #0056b3;
+    background-color: var(--hover-color);
 }
 
 .view-btn:hover {
-    background-color: #0056b3;
+    background-color: var(--hover-color);
 }
 
 @media (max-width: 768px) {
@@ -230,6 +302,7 @@ button.favorite-btn {
     }
 }
 
+/* Weather block details */
 .weather-block {
     display: flex;
     position: relative;
@@ -243,15 +316,21 @@ button.favorite-btn {
     padding: 20px;
     border: 2px solid #e0e0e0;
     border-radius: 12px;
-    background: linear-gradient(145deg, #ffffff, #f7f7f7);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(145deg, var(--white-classic), #f7f7f7);
+    box-shadow: 0 4px 10px var(--shadow-color);
     transition: all 0.3s ease;
 }
 
 .weather-block:hover {
-    border-color: #007bff;
+    border-color: var(--primary-color);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .weather-block {
+        width: 100%;
+    }
 }
 
 .weather-block .city-input {
@@ -266,70 +345,8 @@ button.favorite-btn {
 }
 
 .weather-block .city-input:focus {
-    border-color: #007bff;
+    border-color: var(--primary-color);
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-}
-
-.autocomplete-list {
-    list-style: none;
-    position: absolute;
-    top: 16%;
-    left: 5%;
-    margin: 0;
-    padding: 0;
-    width: 90%;
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.autocomplete-list li {
-    padding: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.autocomplete-list li:hover {
-    background-color: #007bff;
-    color: #ffffff;
-}
-
-.weather-block .favorite-btn,
-.weather-block .delete-btn {
-    padding: 5px 10px;
-    margin: 5px;
-    font-size: 14px;
-    color: #ffffff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.weather-block .favorite-btn:hover,
-.weather-block .delete-btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.1);
-}
-
-.favorite-btn.active {
-    background: #ff9800;
-}
-
-.weather-block .delete-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #dc3545;
-}
-
-.weather-block .delete-btn:hover {
-    background-color: #c82333;
 }
 
 .weather-block .city-name {
@@ -346,70 +363,104 @@ button.favorite-btn {
     text-align: center;
 }
 
-.main-buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
-.nav-buttons {
-    display: flex;
-    gap: 20px;
-}
-
-#add-block {
-    background-color: #28a745;
-    color: #ffffff;
+/* Buttons on weather block */
+button.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--danger-color);
+    color: white;
     border: none;
     border-radius: 50%;
-    height: 40px;
-    width: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
+    width: 25px;
+    height: 25px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button.favorite-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+}
+
+.favorite-btn,
+.delete-btn {
+    padding: 5px 10px;
+    margin: 5px;
+    font-size: 14px;
+    color: var(--white-classic);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-#add-block:hover {
-    background-color: #218838;
+.favorite-btn:hover{
+    background-color: var(--hover-color);
     transform: scale(1.1);
 }
 
-#add-block:active {
-    background-color: #1e7e34;
-    transform: scale(0.95);
+.favorite-btn.active {
+    background: var(--secondary-color);
 }
 
-#add-block.hidden {
-    display: none;
+.delete-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--danger-color);
 }
 
-.nav-buttons button {
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
+.delete-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.1);
+}
+
+/* Chart.js */
+#temp-chart, .weather-chart {
+    width: 100%;
+    max-width: 600px;
+    height: 300px;
+    max-height: 300px;
+}
+
+/* Autocomplete cities list */
+.autocomplete-list {
+    list-style: none;
+    position: absolute;
+    top: 16%;
+    left: 5%;
+    margin: 0;
+    padding: 0;
+    width: 90%;
+    background: var(--white-classic);
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.autocomplete-list li {
+    padding: 8px;
+    font-size: 14px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease;
 }
 
-.nav-buttons button:hover {
-    background-color: #0056b3;
-    transform: translateY(-3px);
+.autocomplete-list li:hover {
+    background-color: var(--primary-color);
+    color: var(--white-classic);
 }
 
-.nav-buttons button:active {
-    background-color: #003d80;
-    transform: translateY(1px);
-}
 
+/* Loader */
 #loader {
     position: fixed;
     top: 0;

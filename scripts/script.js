@@ -29,7 +29,7 @@ function createWeatherBlock(id) {
     const deleteButtonHTML = id !== 1 ? `<button class="delete-btn">x</button>` : '';
 
     block.innerHTML = `
-        <input type="text" placeholder="Enter city..." class="city-input" />
+        <input type="text" placeholder="Введіть місто..." class="city-input" />
         <ul class="autocomplete-list"></ul>
         <button class="favorite-btn">&#9733;</button>
         ${deleteButtonHTML}
@@ -53,13 +53,19 @@ function createWeatherBlock(id) {
 
     if (id !== 1) {
         block.querySelector('.delete-btn').addEventListener('click', () => {
-            showModal('Ви впевнені, що хочете видалити цю картку?', id);
+            function confirmBtnCallback () {
+                deleteBlock(id)
+            }
+
+            showModal('Ви впевнені, що хочете видалити цю картку?', confirmBtnCallback, id);
         });
     }
     block.querySelector('.favorite-btn').addEventListener('click', () => toggleFavorite(id));
 
     weatherBlocksContainer.appendChild(block);
     weatherBlocks.push(id);
+
+    block.scrollIntoView({ behavior: 'smooth' });
 }
 
 function deleteBlock(id) {
@@ -71,11 +77,13 @@ function deleteBlock(id) {
 // weather
 async function displayWeather(data, city, blockId) {
     const block = document.getElementById(`block-${blockId}`);
+    const cityInput = block.querySelector('.city-input');
     const cityName = block.querySelector('.city-name');
     const weatherInfoDiv = block.querySelector('.weather-info');
     const autocompleteList = block.querySelector('.autocomplete-list');
     const tempChartCanvas = block.querySelector('#temp-chart');
 
+    cityInput.value = city.name;
     autocompleteList.innerHTML = '';
     const { temp, feels_like, humidity } = data.main;
     const weatherDescription = data.weather[0].description;
