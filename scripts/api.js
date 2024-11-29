@@ -55,7 +55,6 @@ async function fetchHourlyOrWeeklyWeather(city, mode) {
                 throw new Error('Invalid daily weather data format');
             }
 
-            // Обрабатываем данные на неделю (daily)
             return {
                 labels: data.daily.map(day => {
                     const date = new Date(day.dt * 1000);

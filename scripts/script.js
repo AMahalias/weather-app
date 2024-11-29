@@ -6,6 +6,10 @@ const favoritesSection = document.getElementById('favorites');
 
 let weatherBlocks = [];
 
+function roundToHalf(value) {
+    return Math.round(value * 2) / 2;
+}
+
 // cities list
 function displayAutocomplete(cities, element, blockId) {
     element.innerHTML = '';
@@ -34,7 +38,23 @@ function createWeatherBlock(id) {
         <button class="favorite-btn">&#9733;</button>
         ${deleteButtonHTML}
         <h2 class="city-name"></h2>
-        <div class="weather-info"></div>
+        <div class="weather-info hidden">
+            <div class="temperature">
+                <span class="temp-value"></span>°C
+            </div>
+            <div class="temp-feels"></div>
+            <div class="weather-description"></div>
+            <div class="additional-info">
+                <div class="wind">
+                    <img src="assets/images/wind-icon.png" alt="Wind" class="wind-icon" />
+                    <span class="wind-speed"></span> м/с
+                </div>
+                <div class="humidity">
+                    <img src="assets/images/humidity-icon.png" alt="Humidity" class="humidity-icon" />
+                    <span class="humidity-value"></span> %
+                </div>
+            </div>
+        </div>
         <canvas id="temp-chart"></canvas>
     `;
 
@@ -78,9 +98,14 @@ function deleteBlock(id) {
 async function displayWeather(data, city, blockId) {
     const block = document.getElementById(`block-${blockId}`);
     const cityInput = block.querySelector('.city-input');
-    const cityName = block.querySelector('.city-name');
-    const weatherInfoDiv = block.querySelector('.weather-info');
     const autocompleteList = block.querySelector('.autocomplete-list');
+    const cityName = block.querySelector('.city-name');
+    const weatherInfo = block.querySelector('.weather-info');
+    const tempElement = block.querySelector('.temp-value');
+    const tempFeelsElement = block.querySelector('.temp-feels');
+    const descriptionElement = block.querySelector('.weather-description');
+    const windElement = block.querySelector('.wind-speed');
+    const humidityElement = block.querySelector('.humidity-value');
     const tempChartCanvas = block.querySelector('#temp-chart');
 
     cityInput.value = city.name;
@@ -95,9 +120,14 @@ async function displayWeather(data, city, blockId) {
     }
     block.setAttribute('data-city', JSON.stringify(cityForDataset));
     cityName.innerHTML = city.name;
-    weatherInfoDiv.innerHTML = `Temperature: ${temp}°C, Feels like: ${feels_like}°C, ${weatherDescription}, Humidity: ${humidity}%`;
+    tempElement.innerHTML = roundToHalf(temp);
+    tempFeelsElement.innerHTML = `(feels like ${roundToHalf(feels_like)}°C)`;
+    descriptionElement.innerHTML = weatherDescription;
+    windElement.innerHTML = data.wind.speed;
+    humidityElement.innerHTML = humidity;
 
     toggleActiveFavoriteBtn(block, city.name);
+    weatherInfo.classList.remove('hidden');
     block.classList.remove('hidden');
 
     const observer = new IntersectionObserver((entries, observer) => {

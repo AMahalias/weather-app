@@ -12,7 +12,7 @@ async function renderChart(city, chartElement) {
         data: {
             labels,
             datasets: [{
-                label: 'Temperature (°C)',
+                label: 'Hourly Temperature',
                 data,
                 borderColor: '#007bff',
                 backgroundColor: 'rgba(0, 123, 255, 0.2)',
@@ -48,8 +48,6 @@ async function renderWeekChart(city, chartElement) {
     const weatherData = await fetchHourlyOrWeeklyWeather(city, 'week');
     const { labels, data } = weatherData;
     const ctx = chartElement.getContext('2d');
-    // const labels = daily.map(day => new Date(day.dt * 1000).toLocaleDateString());
-    // const temperatures = daily.map(day => day.temp.day);
 
     if (chartElement.chartInstance) {
         chartElement.chartInstance.destroy();
@@ -70,7 +68,11 @@ async function renderWeekChart(city, chartElement) {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 't (°C)',
+                    },
                 }
             }
         }
