@@ -76,7 +76,7 @@ async function fetchHourlyOrWeeklyWeather(city, mode) {
 
 async function getUserLocation() {
     try {
-        const response = await fetch(`http://ipinfo.io/json?token=${API_IP_TOKEN}`);
+        const response = await fetch(`https://ipinfo.io/json?token=${API_IP_TOKEN}`);
         const data = await response.json();
 
         return data;
