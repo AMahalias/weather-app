@@ -1,5 +1,6 @@
 const API_KEY = '5796abbde9106b7da4febfae8c44c232';
 const BASE_URL = 'https://api.openweathermap.org';
+const API_IP_TOKEN = '62b5cf6b343e2a';
 
 const loader = document.getElementById('loader');
 
@@ -70,5 +71,17 @@ async function fetchHourlyOrWeeklyWeather(city, mode) {
         return { labels: [], data: [] };
     } finally {
         loader.classList.add('hidden');
+    }
+}
+
+async function getUserLocation() {
+    try {
+        const response = await fetch(`http://ipinfo.io/json?token=${API_IP_TOKEN}`);
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching user location:', error);
+        return null;
     }
 }

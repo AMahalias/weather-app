@@ -130,4 +130,16 @@ favoritesTabButton.addEventListener('click', () => {
     addBlockButton.classList.add('hidden');
 });
 
-createWeatherBlock(1);
+async function createUserWeatherBlock () {
+    createWeatherBlock(1);
+    const userData = await getUserLocation();
+    const cityData = {
+        name: userData.city,
+        lat: parseFloat(userData.loc.split(',')[0]),
+        lon: parseFloat(userData.loc.split(',')[1]),
+    }
+    const data = await fetchCurrentWeather(cityData);
+    await displayWeather(data, cityData, 1);
+}
+
+createUserWeatherBlock();
