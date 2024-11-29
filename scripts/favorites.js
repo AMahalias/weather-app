@@ -16,62 +16,49 @@ async function displayFavoriteBlocks () {
         const block = document.createElement('div');
         block.className = 'weather-fav-block';
         block.innerHTML = `
-        <h2>${city.name}</h2>
         <div class="view-mode">
             <button id="day-view" class="view-btn active">День</button>
             <button id="week-view" class="view-btn">Тиждень</button>
         </div>
-        <div class="weather-info"></div>
-         <canvas class="weather-chart"></canvas>
+        ${createWeatherInfoHTML()}
     `;
 
         favoritesContainer.appendChild(block);
 
         const dayButton = block.querySelector('#day-view');
         const weekButton = block.querySelector('#week-view');
-        const weatherInfo = block.querySelector('.weather-info');
-        const chartElement = block.querySelector('.weather-chart');
+        const chartElement = block.querySelector('#temp-chart');
 
         if (dayButton && weekButton) {
             dayButton.addEventListener('click', async () => {
                 dayButton.classList.add('active');
                 weekButton.classList.remove('active');
-                await updateWeatherInfo(city, 'day', weatherInfo, chartElement);
+                await updateWeatherInfo(city, 'day', block, chartElement);
             });
 
             weekButton.addEventListener('click', async () => {
                 weekButton.classList.add('active');
                 dayButton.classList.remove('active');
-                await updateWeatherInfo(city, 'week', weatherInfo, chartElement);
+                await updateWeatherInfo(city, 'week', block, chartElement);
             });
         }
 
-            updateWeatherInfo(city, 'day', weatherInfo, chartElement);
+            updateWeatherInfo(city, 'day', block, chartElement);
         });
 }
 
-async function updateWeatherInfo(city, mode, weatherInfoElement, chartElement) {
+async function updateWeatherInfo(city, mode, block, chartElement) {
     try {
         const weatherData = await fetchCurrentWeather(city);
 
+        updateWeatherInfoData(block, city, weatherData);
         if (mode === 'day') {
-            const { main: { temp, feels_like, humidity }, weather } = weatherData;
-            const description = weather[0].description;
-
-            weatherInfoElement.innerHTML = `
-                <p>Temperature: ${temp}°C</p>
-                <p>Feels like: ${feels_like}°C</p>
-                <p>Humidity: ${humidity}%</p>
-                <p>${description}</p>
-            `;
-
             await renderChart(city, chartElement);
         } else if (mode === 'week') {
-            weatherInfoElement.innerHTML = `<div>Weekly Forecast</div>`;
             await renderWeekChart(city, chartElement);
         }
     } catch (error) {
-        weatherInfoElement.innerHTML = `<p>Error fetching weather data: ${error.message}</p>`;
+        throw new Error(`Error fetching weather data: ${error.message}`);
     }
 }
 
