@@ -10,7 +10,17 @@ function updateFavoritesStorage() {
 }
 
 async function displayFavoriteBlocks () {
-    favoritesContainer.innerHTML = '';
+    const favoritesMessage = document.getElementById('favorites-message');
+    console.log('displayFavoriteBlocks', favoritesMessage);
+
+    if (favoriteCities.length === 0) {
+        favoritesMessage.style.display = 'block';
+        favoritesContainer.style.display = 'none';
+    } else {
+        favoritesMessage.style.display = 'none';
+        favoritesContainer.style.display = 'block';
+    }
+        favoritesContainer.innerHTML = '';
 
     favoriteCities.forEach(city => {
         const block = document.createElement('div');
