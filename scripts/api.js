@@ -1,21 +1,40 @@
 const API_KEY = '5796abbde9106b7da4febfae8c44c232';
 const BASE_URL = 'https://api.openweathermap.org';
 
+const loader = document.getElementById('loader');
+
 async function fetchCities(query) {
     const url = `${BASE_URL}/geo/1.0/direct?q=${query}&limit=5&appid=${API_KEY}`;
-    const response = await fetch(url);
-    return response.json();
+
+    try {
+        const response = await fetch(url);
+        return response.json();
+    } catch (error) {
+        console.error('Error fetch cities:', error);
+    }
 }
 
 async function fetchCurrentWeather(city) {
     const url = `${BASE_URL}/data/2.5/weather?q=${city.name}&units=metric&appid=${API_KEY}`;
-    const response = await fetch(url);
-    return response.json();
+
+    loader.classList.remove('hidden');
+
+    try {
+        const response = await fetch(url);
+        return response.json();
+    } catch (error) {
+        console.error('Error fetch current weather:', error);
+    } finally {
+        loader.classList.add('hidden');
+    }
 }
 
 async function fetchHourlyOrWeeklyWeather(city, mode) {
     const { lat, lon } = city;
     const url = `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+
+    loader.classList.remove('hidden');
+
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -50,5 +69,7 @@ async function fetchHourlyOrWeeklyWeather(city, mode) {
     } catch (error) {
         console.error('Error fetching hourly weather:', error);
         return { labels: [], data: [] };
+    } finally {
+        loader.classList.add('hidden');
     }
 }

@@ -78,8 +78,18 @@ async function updateWeatherInfo(city, mode, weatherInfoElement, chartElement) {
 
 function toggleFavorite(blockId) {
     const block = document.getElementById(`block-${blockId}`);
-    const city = JSON.parse(block.getAttribute('data-city'));
+    const inputField = block.querySelector('.city-input');
+    const cityName = inputField ? inputField.value.trim() : '';
 
+    if (!cityName) {
+        modalMessage.textContent = 'Не можна додати пусте місто до обраних';
+        modal.classList.remove('hidden');
+        cancelDeleteButton.onclick = () => {
+            modal.classList.add('hidden');
+        };
+        return;
+    }
+    const city = JSON.parse(block.getAttribute('data-city'));
     const existingCity = favoriteCities.find(fav => fav.name === city.name);
 
     if (existingCity) {
@@ -94,6 +104,7 @@ function toggleFavorite(blockId) {
                 favoriteCities.push(city);
                 updateFavoritesStorage();
                 displayFavoriteBlocks();
+                toggleActiveFavoriteBtn(block, city.name)
                 modal.classList.add('hidden');
             };
 

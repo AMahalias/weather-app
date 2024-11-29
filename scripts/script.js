@@ -91,6 +91,17 @@ async function displayWeather(data, city, blockId) {
 
     toggleActiveFavoriteBtn(block, city.name);
     block.classList.remove('hidden');
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                renderChart(city, tempChartCanvas);
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+
+    observer.observe(tempChartCanvas);
     await renderChart(city, tempChartCanvas);
 }
 

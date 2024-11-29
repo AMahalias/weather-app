@@ -6,6 +6,13 @@ let blockToDeleteId = null;
 
 function showModal(message, blockId = null) {
     modalMessage.textContent = message;
+
+    if (!blockId) {
+        confirmDeleteButton.classList.add('hidden');
+    } else {
+        confirmDeleteButton.classList.remove('hidden');
+    }
+
     blockToDeleteId = blockId;
     modal.classList.remove('hidden');
 }
@@ -15,11 +22,13 @@ function hideModal() {
     blockToDeleteId = null;
 }
 
-confirmDeleteButton.addEventListener('click', () => {
-    if (blockToDeleteId) {
-        deleteBlock(blockToDeleteId);
-        hideModal();
-    }
-});
+if (confirmDeleteButton) {
+    confirmDeleteButton.addEventListener('click', () => {
+        if (blockToDeleteId) {
+            deleteBlock(blockToDeleteId);
+            hideModal();
+        }
+    });
+}
 
 cancelDeleteButton.addEventListener('click', hideModal);

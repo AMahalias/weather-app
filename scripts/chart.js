@@ -3,11 +3,6 @@ async function renderChart(city, chartElement) {
     const { labels, data } = weatherData;
     const ctx = chartElement.getContext('2d');
 
-    if (chartElement.offsetWidth === 0 || chartElement.offsetHeight === 0) {
-        requestAnimationFrame(() => renderChart(city, chartElement));
-        return;
-    }
-
     if (chartElement.chartInstance) {
         chartElement.chartInstance.destroy();
     }
